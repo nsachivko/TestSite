@@ -1,0 +1,28 @@
+{
+	"name": "agility-next-starter-ssg-sync",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next",
+		"build": "next build",
+		"export": "next export",
+		"deploy": "next build && next export",
+		"start": "next start",
+		"cms-pull": "NODE_ENV=development node agility/agility.sync.js sync",
+		"cms-clear": "NODE_ENV=development node agility/agility.sync.js clear"
+	},
+	"dependencies": {
+		"@agility/content-fetch": "^0.7.1",
+		"@agility/content-sync": "^0.1.8",
+		"@tailwindcss/ui": "^0.3.0",
+		"dotenv": "^8.2.0",
+		"isomorphic-unfetch": "^3.0.0",
+		"next": "^9.4.4",
+		"postcss-import": "^12.0.1",
+		"react": "16.12.0",
+		"react-dom": "16.12.0",
+		"react-transition-group": "^4.4.1",
+		"tailwindcss": "^1.4.6",
+		"truncate-html": "^1.0.3"
+	}
+}
