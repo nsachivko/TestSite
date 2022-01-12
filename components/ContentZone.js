@@ -11,7 +11,7 @@ export default function ContentZone({ name, page, dynamicPageItem }) {
 
 			//Bug: when dynamic imports are used within the module, it doest not get outputted server-side
 			//let AgilityModule = dynamic(() => import ('../modules/' + m.moduleName));
-
+			
 			let AgilityModule = require('../modules/' + m.moduleName + '.js').default;
 
 			return <AgilityModule key={m.item.contentID} page={page} dynamicPageItem={dynamicPageItem} {...m.item} />
