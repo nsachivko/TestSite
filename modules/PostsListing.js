@@ -11,13 +11,11 @@ const PostsListing = (props) => {
 	}
 
 	const renderPosts = () => {
-
 		if (props.customData.posts != null) {
 
 			return props.customData.posts.map(item => {
-
 				return (
-					<li key={`${item.contentID}-${props.contentID}`} className="my-12 md:my-0 ">
+					<li key={`${item.contentID}-${props.contentID}`} className="m-5">
 						<Link href="[...slug]" as={props.customData.dynamicUrls[item.contentID]}><a>
 							<div className="flex">
 								<div className="flex-shrink-0">
@@ -38,7 +36,7 @@ const PostsListing = (props) => {
 									<h4 className="text-lg leading-6 font-medium text-gray-900 hover:underline">
 										{item.fields.title}
 									</h4>
-									<p className="mt-2 text-base leading-6 text-gray-500" dangerouslySetInnerHTML={renderPostExcerpt(item.fields.details)}></p>
+									<p className="mt-2 text-base leading-6 text-gray-500">Click</p>
 								</div>
 							</div>
 						</a></Link>

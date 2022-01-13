@@ -20,7 +20,7 @@ const GeneratePDF = (props) => {
       <div className="container mx-auto px-4 mt-5">
         <div className="flex items-center "></div>
         <h1 id="pdf-content">Nikita Sachivko: Agility CMS and Next.js training</h1>
-        <button onClick={generatePdf} className="rounded-full 800">Generate Pdf</button>
+        <button onClick={generatePdf} className="rounded-full 800">Click to generate Pdf</button>
       </div>
     </div>
   );

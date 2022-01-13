@@ -10,7 +10,11 @@ module.exports = {
 	},
 	purge: [
 		//TODO: figure out how to get purge to work properly
-		//'./pages/**/*.js'
+		'./components/util/*.js',
+		'./components/*.js',
+		'./modules/*js',
+		'./pages/*.js',
+		'./pageTemplates/*.js'
 	],
 	plugins: [
 		require('@tailwindcss/ui'),
