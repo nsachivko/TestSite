@@ -30,6 +30,7 @@ const Search = () => {
       title: { raw: {} },
       url: { raw: {} },
       headings: { raw: {} },
+      body_content: {raw: {}}
     },
   }
 
@@ -40,6 +41,7 @@ const Search = () => {
       title: param.getRaw("title").replace(/\|[^.]+$/, ""),
       url: param.getRaw("url"),
       headings: param.getRaw("headings"),
+      body_content: param.getRaw("body_content"),
     }
     setSearchResults((searchResults) => [...searchResults, newResult])
   }
@@ -82,13 +84,7 @@ const Search = () => {
               .replace(/\|[^.]+$/, "")
               .trim() === "News Detail"
           ) {
-            result.data.title.raw = result.data.url.raw
-              .replace("https://www.oxfordproperties.com/news/", "")
-              .replace(/\?[^.]+$/, "")
-              .replace(/-/gi, " ")
-              .replace(/(\b[a-z](?!\s))/g, function (x) {
-                return x.toUpperCase()
-              })
+            result.data.title.raw = result.data.headings.raw[1]
           }
           addFunction(result)
         })
