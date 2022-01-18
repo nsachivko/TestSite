@@ -1,9 +1,9 @@
-import React from "react";
-import { renderHTML } from "../agility/utils";
+import React from "react"
+import { renderHTML } from "../agility/utils"
 
 const TextBlockWithImage = (props) => {
   // get module fields
-  const fields = props.fields;
+  const fields = props.fields
   return (
     <div className="container mx-auto px-4 mt-5">
       <div className="flex items-center">
@@ -18,7 +18,7 @@ const TextBlockWithImage = (props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TextBlockWithImage;
+export default TextBlockWithImage

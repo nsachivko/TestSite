@@ -1,40 +1,70 @@
 import React, { useState } from "react"
-import { renderHTML } from "../agility/utils"
-import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector"
-import parse from "html-react-parser"
-const elasticsearch = require("elasticsearch")
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
+import { AutoCompleteComponent } from "@syncfusion/ej2-react-dropdowns"
+import DisplayResults from "./Search-Components/DisplayResults"
+import ReactPaginate from "react-paginate"
+import TextField from "@mui/material/TextField"
+import Stack from "@mui/material/Stack"
+import Autocomplete from "@mui/material/Autocomplete"
 
-const Search = (props) => {
+const Search = () => {
+  // Hold search input value
   const [getInput, setInput] = useState()
+
+  // Holds results of search
   const [searchResults, setSearchResults] = useState([])
 
+  // Holds results of search for autocomplete system
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
+
+  // Connection to web crawler
   const client = ElasticAppSearch.createClient({
     searchKey: "search-6cujcf6k56b9itogx4nuw8pr",
     endpointBase: "https://my-test-app.ent.us-east4.gcp.elastic-cloud.com",
-    engineName: "test-engine",
+    engineName: "oxfordproperties-search-engine",
   })
 
+  // Set or expected values from search
   const options = {
     search_fields: { title: {} },
-    result_fields: { id: { raw: {} }, title: { raw: {} }, url: { raw: {} } },
+    result_fields: {
+      id: { raw: {} },
+      title: { raw: {} },
+      url: { raw: {} },
+      headings: { raw: {} },
+    },
   }
 
+  // Adds resuls to array
   const addResult = (param) => {
     const newResult = {
       id: param.getRaw("id"),
-      title: param.getRaw("title"),
+      title: param.getRaw("title").replace(/\|[^.]+$/, ""),
       url: param.getRaw("url"),
+      headings: param.getRaw("headings"),
     }
-    setSearchResults([...searchResults, newResult])
+    setSearchResults((searchResults) => [...searchResults, newResult])
   }
 
-  const searchData = (param) => {
+  const addAutocompleteResult = (param) => {
+    const newResult = {
+      title: param.getRaw("title").replace(/\|[^.]+$/, ""),
+    }
+    setAutocompleteSuggestions((autocompleteSuggestions) => [
+      ...autocompleteSuggestions,
+      newResult,
+    ])
+  }
+
+  // Searching process
+  const searchData = (param, addFunction) => {
+    setSearchResults([])
+    setAutocompleteSuggestions([])
     client
       .search(param, options)
       .then((resultList) => {
         resultList.results.forEach((result) => {
-          addResult(result)
+          addFunction(result)
         })
       })
       .catch((error) => {
@@ -42,39 +72,52 @@ const Search = (props) => {
       })
   }
 
-  const clearSearchResults = () => {
+  // Sets searchbar input
+  const setSearchInput = () => {
     setSearchResults([])
+    setAutocompleteSuggestions([])
+    setInput(document.getElementById("free-solo-demo").value)
+    searchData(getInput, addAutocompleteResult)
   }
 
-  const setSearchInput = (param) => {
-    setInput(param)
-    clearSearchResults()
-    searchData(getInput)
+
+  // Controller of search process
+  const startSearch = () => {
+    setAutocompleteSuggestions([])
+    searchData(document.getElementById("free-solo-demo").value, addResult)
   }
 
   return (
-    <div class="py-20 h-screen bg-gray-300 px-2">
-      <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
-        <input
-          value={getInput}
-          onChange={() => setSearchInput(event.target.value)}
-          type="text"
-          class="h-14 w-96 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none"
-          placeholder="Search anything..."
-        ></input>
-
-        <div className="mt-1">
-          {searchResults.map((searchResult) => {
-            if (getInput.length > 0)
-              return (
-                <div className="mt-1">
-                  <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
-                    <a href={searchResult.url}>{searchResult.title}</a>
-                  </div>
-                </div>
-              )
-          })}
+    <div
+      className="py-20 h-screen px-2"
+      style={{ minHeight: "100%" }}
+      id="container"
+    >
+      <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+        <div className="flex display-flex">
+          <Stack spacing={2} sx={{ width: 300 }}>
+            <Autocomplete
+              id="free-solo-demo"
+              freeSolo
+              options={autocompleteSuggestions.map((option) => option.title)}
+              renderInput={(params) => (
+                <TextField
+                  value={getInput}
+                  onChange={() => setSearchInput(event.target.value)}
+                  {...params}
+                  label="How can we help you?"
+                />
+              )}
+            />
+          </Stack>
+          <button
+            onClick={() => startSearch(event.target.value)}
+            class="relative bg-blue-500 text-white p-4 rounded"
+          >
+            Search
+          </button>
         </div>
+        <DisplayResults searchResults={searchResults} getInput={getInput} />
       </div>
     </div>
   )
