@@ -6,19 +6,14 @@ import Stack from "@mui/material/Stack"
 import Autocomplete from "@mui/material/Autocomplete"
 
 const Search = () => {
-
-
   // Hold search input value
   const [getInput, setInput] = useState()
-
 
   // Holds results of search
   const [searchResults, setSearchResults] = useState([])
 
-
   // Holds results of search for autocomplete system
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
-
 
   // Connection to web crawler
   const client = ElasticAppSearch.createClient({
@@ -26,7 +21,6 @@ const Search = () => {
     endpointBase: "https://my-test-app.ent.us-east4.gcp.elastic-cloud.com",
     engineName: "oxfordproperties-search-engine",
   })
-
 
   // Set or expected values from search
   const options = {
@@ -39,7 +33,6 @@ const Search = () => {
     },
   }
 
-
   // Adds resuls to array
   const addResult = (param) => {
     const newResult = {
@@ -51,34 +44,51 @@ const Search = () => {
     setSearchResults((searchResults) => [...searchResults, newResult])
   }
 
-
   // Processing autocomplete results search
   const addAutocompleteResult = (param) => {
-    const newResult = {
-      title: param.getRaw("title").replace(/\|[^.]+$/, ""),
+    if (
+      param
+        .getRaw("title")
+        .replace(/\|[^.]+$/, "")
+        .trim() !== "404"
+    ) {
+      const newResult = {
+        title: param.getRaw("title").replace(/\|[^.]+$/, ""),
+      }
+      if (newResult.title.length > 50) {
+        newResult.title = newResult.title.substr(0, 50)
+        newResult.title += "..."
+      }
+      setAutocompleteSuggestions((autocompleteSuggestions) => [
+        ...autocompleteSuggestions,
+        newResult,
+      ])
     }
-    setAutocompleteSuggestions((autocompleteSuggestions) => [
-      ...autocompleteSuggestions,
-      newResult,
-    ])
   }
 
-
   // Searching process
+  // Adds data to search result array
+  // Fix title for news
   const searchData = (param, addFunction) => {
     setSearchResults([])
     setAutocompleteSuggestions([])
     client
       .search(param, options)
       .then((resultList) => {
-        let temp
         resultList.results.forEach((result) => {
-          if (result.getRaw("title").replace(/\|[^.]+$/, "").trim() === 'News Detail'){
-            result.data.title.raw = result.data.url.raw.replace("https://www.oxfordproperties.com/news/", "")
-            .replace(/\?[^.]+$/, "")
-            .replace(/-/gi," ")
-            .replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})
-            console.log(result.data.title.raw)
+          if (
+            result
+              .getRaw("title")
+              .replace(/\|[^.]+$/, "")
+              .trim() === "News Detail"
+          ) {
+            result.data.title.raw = result.data.url.raw
+              .replace("https://www.oxfordproperties.com/news/", "")
+              .replace(/\?[^.]+$/, "")
+              .replace(/-/gi, " ")
+              .replace(/(\b[a-z](?!\s))/g, function (x) {
+                return x.toUpperCase()
+              })
           }
           addFunction(result)
         })
@@ -88,7 +98,6 @@ const Search = () => {
       })
   }
 
-
   // Sets searchbar input
   const setSearchInput = () => {
     setSearchResults([])
@@ -96,7 +105,6 @@ const Search = () => {
     setInput(document.getElementById("free-solo-demo").value)
     searchData(getInput, addAutocompleteResult)
   }
-
 
   // Controller of search process
   const startSearch = () => {
