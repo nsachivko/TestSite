@@ -1,21 +1,24 @@
 import React, { useState } from "react"
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
-import { AutoCompleteComponent } from "@syncfusion/ej2-react-dropdowns"
 import DisplayResults from "./Search-Components/DisplayResults"
-import ReactPaginate from "react-paginate"
 import TextField from "@mui/material/TextField"
 import Stack from "@mui/material/Stack"
 import Autocomplete from "@mui/material/Autocomplete"
 
 const Search = () => {
+
+
   // Hold search input value
   const [getInput, setInput] = useState()
+
 
   // Holds results of search
   const [searchResults, setSearchResults] = useState([])
 
+
   // Holds results of search for autocomplete system
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
+
 
   // Connection to web crawler
   const client = ElasticAppSearch.createClient({
@@ -24,9 +27,10 @@ const Search = () => {
     engineName: "oxfordproperties-search-engine",
   })
 
+
   // Set or expected values from search
   const options = {
-    search_fields: { title: {} },
+    search_fields: { url: {} },
     result_fields: {
       id: { raw: {} },
       title: { raw: {} },
@@ -34,6 +38,7 @@ const Search = () => {
       headings: { raw: {} },
     },
   }
+
 
   // Adds resuls to array
   const addResult = (param) => {
@@ -46,6 +51,8 @@ const Search = () => {
     setSearchResults((searchResults) => [...searchResults, newResult])
   }
 
+
+  // Processing autocomplete results search
   const addAutocompleteResult = (param) => {
     const newResult = {
       title: param.getRaw("title").replace(/\|[^.]+$/, ""),
@@ -56,6 +63,7 @@ const Search = () => {
     ])
   }
 
+
   // Searching process
   const searchData = (param, addFunction) => {
     setSearchResults([])
@@ -63,7 +71,15 @@ const Search = () => {
     client
       .search(param, options)
       .then((resultList) => {
+        let temp
         resultList.results.forEach((result) => {
+          if (result.getRaw("title").replace(/\|[^.]+$/, "").trim() === 'News Detail'){
+            result.data.title.raw = result.data.url.raw.replace("https://www.oxfordproperties.com/news/", "")
+            .replace(/\?[^.]+$/, "")
+            .replace(/-/gi," ")
+            .replace(/(\b[a-z](?!\s))/g, function(x){return x.toUpperCase()})
+            console.log(result.data.title.raw)
+          }
           addFunction(result)
         })
       })
@@ -71,6 +87,7 @@ const Search = () => {
         console.log(`error: ${error}`)
       })
   }
+
 
   // Sets searchbar input
   const setSearchInput = () => {
