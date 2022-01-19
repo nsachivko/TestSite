@@ -6,17 +6,14 @@ const searchResultsColor = "#24272A"
 const headingsContentColor = "#24272A"
 
 const extractDomain = (url) => {
-  var result
-  var match
+  let result
+  let match
   if (
     (match = url.match(
       /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im
     ))
   ) {
     result = match[1]
-    if ((match = result.match(/^[^\.]+\.(.+\..+)$/))) {
-      result = match[1]
-    }
   }
   return result
 }
@@ -28,7 +25,6 @@ const renderData = (data) => {
         {
           tempDomainUrl = extractDomain(el.url)
           headingsContent = el.headings[0] + " | " + el.headings[1]
-          console.log(headingsContent)
           if (headingsContent.length > 50) {
             headingsContent = headingsContent.substr(0, 50)
             headingsContent += "..."
@@ -72,8 +68,7 @@ const renderData = (data) => {
   )
 }
 
-function PaginationComponent({ searchResults, getInput }) {
-  console.log(searchResults)
+const PaginationComponent = ({ searchResults, getInput, pageNumber}) => {
   const [data, setData] = useState([])
 
   const [currentPage, setcurrentPage] = useState(1)
@@ -114,24 +109,32 @@ function PaginationComponent({ searchResults, getInput }) {
   })
 
   useEffect(() => {
+    if (pageNumber === 1){
+      setcurrentPage(1)
+      pageNumber = 2
+    } 
     setData(searchResults)
   }, [searchResults])
 
   const handleNextbtn = () => {
-    setcurrentPage(currentPage + 1)
+    if (currentPage < pages.length) {
+      setcurrentPage(currentPage + 1)
 
-    if (currentPage + 1 > maxPageNumberLimit) {
-      setmaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit)
-      setminPageNumberLimit(minPageNumberLimit + pageNumberLimit)
+      if (currentPage + 1 > maxPageNumberLimit) {
+        setmaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit)
+        setminPageNumberLimit(minPageNumberLimit + pageNumberLimit)
+      }
     }
   }
 
   const handlePrevbtn = () => {
+    if (currentPage > 1){
     setcurrentPage(currentPage - 1)
 
     if ((currentPage - 1) % pageNumberLimit == 0) {
       setmaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit)
       setminPageNumberLimit(minPageNumberLimit - pageNumberLimit)
+    }
     }
   }
 
@@ -144,9 +147,9 @@ function PaginationComponent({ searchResults, getInput }) {
   if (minPageNumberLimit >= 1) {
     pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>
   }
-
-  const handleLoadMore = () => {
-    setitemsPerPage(itemsPerPage + 5)
+  
+  for (let i = 0; i < pages.length; i++){
+      pages[i] = i
   }
 
   return (
@@ -155,34 +158,33 @@ function PaginationComponent({ searchResults, getInput }) {
         className="text-2xl font-semibold mt-5"
         style={{ color: searchResultsColor, fontWeight: "bold" }}
       >
-        Search Results:{" "}
+        Search Results:
       </h1>
       {renderData(currentItems)}
       <ul className="pageNumbers">
         <li>
-          <button
+          <a
+            className="text-gray-500"
             onClick={handlePrevbtn}
             disabled={currentPage == pages[0] ? true : false}
           >
             Prev
-          </button>
+          </a>
         </li>
+        {console.log({pages})}
         {pageDecrementBtn}
         {renderPageNumbers}
         {pageIncrementBtn}
-
         <li>
-          <button
+          <a
+            className="text-gray-500"
             onClick={handleNextbtn}
             disabled={currentPage == pages[pages.length - 1] ? true : false}
           >
             Next
-          </button>
+          </a>
         </li>
       </ul>
-      <button onClick={handleLoadMore} className="loadmore">
-        Load More
-      </button>
     </>
   )
 }

@@ -9,6 +9,9 @@ const Search = () => {
   // Hold search input value
   const [getInput, setInput] = useState()
 
+  // After finding the results, the user will be returned to the first page
+  const [pageNumber, setPageNumber] = useState(1)
+
   // Holds results of search
   const [searchResults, setSearchResults] = useState([])
 
@@ -82,7 +85,6 @@ const Search = () => {
   // Adds data to search result array
   // Fix title for news
   const searchData = (param, addFunction) => {
-    setSearchResults([])
     setAutocompleteSuggestions([])
     client
       .search(param, options)
@@ -107,7 +109,6 @@ const Search = () => {
   // Sets searchbar input
   const setSearchInput = () => {
     options.page.size = 10
-    setSearchResults([])
     setAutocompleteSuggestions([])
     setInput(document.getElementById("free-solo-demo").value)
     searchData(getInput, addAutocompleteResult)
@@ -116,6 +117,8 @@ const Search = () => {
   // Controller of search process
   const startSearch = () => {
     options.page.size = 100
+    setPageNumber(1)
+    setSearchResults([])
     setAutocompleteSuggestions([])
     searchData(document.getElementById("free-solo-demo").value, addResult)
   }
@@ -150,7 +153,7 @@ const Search = () => {
             Search
           </button>
         </div>
-        <DisplayResults searchResults={searchResults} getInput={getInput} />
+        <DisplayResults searchResults={searchResults} getInput={getInput} pageNumber={pageNumber} />
       </div>
     </div>
   )

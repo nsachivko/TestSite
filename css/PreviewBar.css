@@ -64,6 +64,8 @@
 }
 
 
+
+
 .pageNumbers {
     list-style: none;
     display: flex;
@@ -77,13 +79,14 @@
   
   .pageNumbers li.active {
     background-color: white;
-    color: black;
+    color: #364A59;
+    font-weight: bold;
   }
   
   .pageNumbers li button {
     background-color: transparent;
     border: none;
-    color: white;
+    color: black;
     font-size: 1.5rem;
     cursor: pointer;
   }
@@ -101,6 +104,9 @@
   
     color: white;
     font-size: 1.2rem;
-    border: 1px solid white;
+    border: 1px solid whgrayite;
     cursor: pointer;
   }
+
+
+ 
