@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack"
 import Autocomplete from "@mui/material/Autocomplete"
 
 const Search = () => {
+  
   // Hold search input value
   const [getInput, setInput] = useState()
 
@@ -23,7 +24,7 @@ const Search = () => {
   })
 
   // Set or expected values from search
-  const options = {
+  let options = {
     search_fields: { url: {} },
     result_fields: {
       id: { raw: {} },
@@ -32,6 +33,9 @@ const Search = () => {
       headings: { raw: {} },
       body_content: {raw: {}}
     },
+    page : {
+       size : 10
+    }
   }
 
   // Adds resuls to array
@@ -96,6 +100,7 @@ const Search = () => {
 
   // Sets searchbar input
   const setSearchInput = () => {
+    options.page.size = 10
     setSearchResults([])
     setAutocompleteSuggestions([])
     setInput(document.getElementById("free-solo-demo").value)
@@ -104,6 +109,7 @@ const Search = () => {
 
   // Controller of search process
   const startSearch = () => {
+    options.page.size = 100
     setAutocompleteSuggestions([])
     searchData(document.getElementById("free-solo-demo").value, addResult)
   }
