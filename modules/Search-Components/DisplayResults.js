@@ -68,7 +68,7 @@ const renderData = (data) => {
   )
 }
 
-const PaginationComponent = ({ searchResults, getInput, pageNumber}) => {
+const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
   const [data, setData] = useState([])
 
   const [currentPage, setcurrentPage] = useState(1)
@@ -91,6 +91,7 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber}) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem)
 
+
   const renderPageNumbers = pages.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
       return (
@@ -109,10 +110,13 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber}) => {
   })
 
   useEffect(() => {
-    if (pageNumber === 1){
-      setcurrentPage(1)
+    if (pageNumber === 1) {
       pageNumber = 2
-    } 
+      const currentNumberOfPages = currentPage
+      for (let i = 0; i < currentNumberOfPages; i++ ){
+        handlePrevbtn()
+      }
+    }
     setData(searchResults)
   }, [searchResults])
 
@@ -128,28 +132,14 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber}) => {
   }
 
   const handlePrevbtn = () => {
-    if (currentPage > 1){
-    setcurrentPage(currentPage - 1)
+    if (currentPage > 1) {
+      setcurrentPage(currentPage - 1)
 
-    if ((currentPage - 1) % pageNumberLimit == 0) {
-      setmaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit)
-      setminPageNumberLimit(minPageNumberLimit - pageNumberLimit)
+      if ((currentPage - 1) % pageNumberLimit == 0) {
+        setmaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit)
+        setminPageNumberLimit(minPageNumberLimit - pageNumberLimit)
+      }
     }
-    }
-  }
-
-  let pageIncrementBtn = null
-  if (pages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>
-  }
-
-  let pageDecrementBtn = null
-  if (minPageNumberLimit >= 1) {
-    pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>
-  }
-  
-  for (let i = 0; i < pages.length; i++){
-      pages[i] = i
   }
 
   return (
@@ -171,10 +161,8 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber}) => {
             Prev
           </a>
         </li>
-        {console.log({pages})}
-        {pageDecrementBtn}
+        {console.log("pages => ", pages, " current page => ", currentPage)}
         {renderPageNumbers}
-        {pageIncrementBtn}
         <li>
           <a
             className="text-gray-500"
