@@ -6,7 +6,6 @@ import Stack from "@mui/material/Stack"
 import Autocomplete from "@mui/material/Autocomplete"
 
 const Search = () => {
-  
   // Hold search input value
   const [getInput, setInput] = useState()
 
@@ -25,29 +24,36 @@ const Search = () => {
 
   // Set or expected values from search
   let options = {
-    search_fields: { url: {} },
+    search_fields: { title: {}, url: {} },
     result_fields: {
       id: { raw: {} },
       title: { raw: {} },
       url: { raw: {} },
       headings: { raw: {} },
-      body_content: {raw: {}}
+      body_content: { raw: {} },
     },
-    page : {
-       size : 10
-    }
+    page: {
+      size: 10,
+    },
   }
 
   // Adds resuls to array
   const addResult = (param) => {
-    const newResult = {
-      id: param.getRaw("id"),
-      title: param.getRaw("title").replace(/\|[^.]+$/, ""),
-      url: param.getRaw("url"),
-      headings: param.getRaw("headings"),
-      body_content: param.getRaw("body_content"),
+    if (
+      param
+        .getRaw("title")
+        .replace(/\|[^.]+$/, "")
+        .trim() !== "404"
+    ) {
+      const newResult = {
+        id: param.getRaw("id"),
+        title: param.getRaw("title").replace(/\|[^.]+$/, ""),
+        url: param.getRaw("url"),
+        headings: param.getRaw("headings"),
+        body_content: param.getRaw("body_content"),
+      }
+      setSearchResults((searchResults) => [...searchResults, newResult])
     }
-    setSearchResults((searchResults) => [...searchResults, newResult])
   }
 
   // Processing autocomplete results search
