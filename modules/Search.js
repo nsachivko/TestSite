@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
 import DisplayResults from "./Search-Components/DisplayResults"
 import TextField from "@mui/material/TextField"
@@ -16,7 +16,7 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState([])
 
   // Holds results of search for autocomplete system
-  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([])
+  const [autoCompleteSuggestions, setAutoCompleteSuggestions] = useState([])
 
   // Connection to web crawler
   const client = ElasticAppSearch.createClient({
@@ -40,13 +40,15 @@ const Search = () => {
     },
   }
 
-  // Adds resuls to array
+  // Adds resuls to array (searchResults)
+  // Finds up to 100 records
   const addResult = (param) => {
     if (
       param
         .getRaw("title")
         .replace(/\|[^.]+$/, "")
-        .trim() !== "404"
+        .trim() !== "404" &&
+      !param.getRaw("url").match("/errors/")
     ) {
       const newResult = {
         id: param.getRaw("id"),
@@ -59,7 +61,8 @@ const Search = () => {
     }
   }
 
-  // Processing autocomplete results search
+  // Adds autocomplete resuls to array (autoCompleteSuggestions)
+  // Find 10 records
   const addAutocompleteResult = (param) => {
     if (
       param
@@ -74,8 +77,8 @@ const Search = () => {
         newResult.title = newResult.title.substr(0, 50)
         newResult.title += "..."
       }
-      setAutocompleteSuggestions((autocompleteSuggestions) => [
-        ...autocompleteSuggestions,
+      setAutoCompleteSuggestions((autoCompleteSuggestions) => [
+        ...autoCompleteSuggestions,
         newResult,
       ])
     }
@@ -85,7 +88,7 @@ const Search = () => {
   // Adds data to search result array
   // Fix title for news
   const searchData = (param, addFunction) => {
-    setAutocompleteSuggestions([])
+    setAutoCompleteSuggestions([])
     client
       .search(param, options)
       .then((resultList) => {
@@ -108,19 +111,36 @@ const Search = () => {
 
   // Sets searchbar input
   const setSearchInput = () => {
-    options.page.size = 10
-    setAutocompleteSuggestions([])
     setInput(document.getElementById("free-solo-demo").value)
-    searchData(getInput, addAutocompleteResult)
   }
 
   // Controller of search process
+  // Clears autoCompleteSuggestions and searchResults
+  // Moves user to first page
   const startSearch = () => {
     options.page.size = 100
     setPageNumber(1)
     setSearchResults([])
-    setAutocompleteSuggestions([])
+    setAutoCompleteSuggestions([])
     searchData(document.getElementById("free-solo-demo").value, addResult)
+  }
+
+  // Sets autocomplete suggestions
+  useEffect(() => {
+    options.page.size = 10
+    setAutoCompleteSuggestions([])
+
+    // Passing autocomplete setter
+    searchData(
+      document.getElementById("free-solo-demo").value,
+      addAutocompleteResult
+    )
+  }, [getInput])
+
+  // Sets autocomplete suggestions
+  // Works as trigger
+  const autoCompleteOptions = () => {
+    return autoCompleteSuggestions.map((result) => result.title)
   }
 
   return (
@@ -135,7 +155,7 @@ const Search = () => {
             <Autocomplete
               id="free-solo-demo"
               freeSolo
-              options={autocompleteSuggestions.map((option) => option.title)}
+              options={autoCompleteOptions()}
               renderInput={(params) => (
                 <TextField
                   value={getInput}
@@ -153,7 +173,11 @@ const Search = () => {
             Search
           </button>
         </div>
-        <DisplayResults searchResults={searchResults} getInput={getInput} pageNumber={pageNumber} />
+        <DisplayResults
+          searchResults={searchResults}
+          getInput={getInput}
+          pageNumber={pageNumber}
+        />
       </div>
     </div>
   )

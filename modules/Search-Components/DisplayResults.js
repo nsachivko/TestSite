@@ -19,8 +19,10 @@ const extractDomain = (url) => {
 }
 
 const renderData = (data) => {
+  const noData = data.length === 0 ? true : false
   return (
     <ul>
+      {noData && <h1 className="mt-5">No Data</h1>}
       {data.map((el, index) => {
         {
           tempDomainUrl = extractDomain(el.url)
@@ -78,6 +80,8 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5)
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0)
 
+  const noData = searchResults.length === 0 ? true : false
+
   const handleClick = (event) => {
     setcurrentPage(Number(event.target.id))
   }
@@ -90,7 +94,6 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem)
-
 
   const renderPageNumbers = pages.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
@@ -113,7 +116,7 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
     if (pageNumber === 1) {
       pageNumber = 2
       const currentNumberOfPages = currentPage
-      for (let i = 0; i < currentNumberOfPages; i++ ){
+      for (let i = 0; i < currentNumberOfPages; i++) {
         handlePrevbtn()
       }
     }
@@ -141,7 +144,6 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
       }
     }
   }
-
   return (
     <>
       <h1
@@ -151,28 +153,34 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
         Search Results:
       </h1>
       {renderData(currentItems)}
-      <ul className="pageNumbers">
-        <li>
-          <a
-            className="text-gray-500"
-            onClick={handlePrevbtn}
-            disabled={currentPage == pages[0] ? true : false}
-          >
-            Prev
-          </a>
-        </li>
-        {console.log("pages => ", pages, " current page => ", currentPage)}
-        {renderPageNumbers}
-        <li>
-          <a
-            className="text-gray-500"
-            onClick={handleNextbtn}
-            disabled={currentPage == pages[pages.length - 1] ? true : false}
-          >
-            Next
-          </a>
-        </li>
-      </ul>
+
+      {!noData && (
+        <ul className="pageNumbers">
+          <li>
+            {currentPage !== 1 && (
+              <a
+                className="text-gray-500"
+                onClick={handlePrevbtn}
+                disabled={currentPage == pages[0] ? true : false}
+              >
+                Prev
+              </a>
+            )}
+          </li>
+          {renderPageNumbers}
+          <li>
+            {currentPage !== pages.length && (
+              <a
+                className="text-gray-500"
+                onClick={handleNextbtn}
+                disabled={currentPage == pages[pages.length - 1] ? true : false}
+              >
+                Next
+              </a>
+            )}
+          </li>
+        </ul>
+      )}
     </>
   )
 }
