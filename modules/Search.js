@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react"
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
 import DisplayResults from "./Search-Components/DisplayResults"
+
+// Mui for input and autocomplete
 import TextField from "@mui/material/TextField"
 import Stack from "@mui/material/Stack"
 import Autocomplete from "@mui/material/Autocomplete"
+
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import ListItemButton from "@mui/material/ListItemButton"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import ListItemText from "@mui/material/ListItemText"
+import Checkbox from "@mui/material/Checkbox"
+import IconButton from "@mui/material/IconButton"
 
 const Search = () => {
   // Hold search input value
@@ -68,19 +78,28 @@ const Search = () => {
       param
         .getRaw("title")
         .replace(/\|[^.]+$/, "")
-        .trim() !== "404"
+        .trim() !== "404" &&
+      getInput.trim() != ""
     ) {
       const newResult = {
         title: param.getRaw("title").replace(/\|[^.]+$/, ""),
+        //title: param.data.headings.raw[1],
       }
       if (newResult.title.length > 50) {
         newResult.title = newResult.title.substr(0, 50)
         newResult.title += "..."
       }
+      // setAutoCompleteSuggestions((autoCompleteSuggestions) => [
+      //   ...autoCompleteSuggestions,
+      //   newResult,
+      // ])
       setAutoCompleteSuggestions((autoCompleteSuggestions) => [
         ...autoCompleteSuggestions,
         newResult,
       ])
+      // const temp = autoCompleteSuggestions.filter(
+      //   (v, i, a) => a.findIndex((t) => t.title === v.title) === i
+      // )
     }
   }
 
@@ -140,7 +159,9 @@ const Search = () => {
   // Sets autocomplete suggestions
   // Works as trigger
   const autoCompleteOptions = () => {
-    return autoCompleteSuggestions.map((result) => result.title)
+    return autoCompleteSuggestions.filter(
+      (v, i, a) => a.findIndex((t) => t.title === v.title) === i
+    )
   }
 
   return (
@@ -151,7 +172,7 @@ const Search = () => {
     >
       <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
         <div className="flex display-flex">
-          <Stack spacing={2} sx={{ width: 300 }}>
+          {/* <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete
               id="free-solo-demo"
               freeSolo
@@ -165,13 +186,45 @@ const Search = () => {
                 />
               )}
             />
-          </Stack>
-          <button
-            onClick={() => startSearch(event.target.value)}
-            class="relative bg-blue-500 text-white p-4 rounded"
-          >
-            Search
-          </button>
+          </Stack> */}
+          <div className="flex justify-center">
+            <div className="mb-3 xl:w-96">
+              <div className="input-group relative flex flex-wrap items-stretch w-full mb-4">
+                <div className="flex justify-center">
+                  <input
+                    id="free-solo-demo"
+                    value={getInput}
+                    onChange={() => setSearchInput(event.target.value)}
+                    type="search"
+                    className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="Search"
+                    aria-label="Search"
+                    aria-describedby="button-addon3"
+                  ></input>
+                  <button
+                    onClick={() => startSearch(event.target.value)}
+                    className="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                    type="button"
+                    id="button-addon3"
+                  >
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute py-2 bg-white bg-gray-100 divide-y divide-gray-600 rounded-md shadow-xl w-44">
+          {autoCompleteOptions().map((value) => {
+            return (
+              <a
+                onClick={() => setInput(value.title)}
+                class="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white"
+              >
+                {value.title}
+              </a>
+            )
+          })}
         </div>
         <DisplayResults
           searchResults={searchResults}
@@ -182,5 +235,4 @@ const Search = () => {
     </div>
   )
 }
-
 export default Search
