@@ -172,21 +172,6 @@ const Search = () => {
     >
       <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
         <div className="flex display-flex">
-          {/* <Stack spacing={2} sx={{ width: 300 }}>
-            <Autocomplete
-              id="free-solo-demo"
-              freeSolo
-              options={autoCompleteOptions()}
-              renderInput={(params) => (
-                <TextField
-                  value={getInput}
-                  onChange={() => setSearchInput(event.target.value)}
-                  {...params}
-                  label="How can we help you?"
-                />
-              )}
-            />
-          </Stack> */}
           <div className="flex justify-center">
             <div className="mb-3 xl:w-96">
               <div className="input-group relative flex flex-wrap items-stretch w-full mb-4">
@@ -219,7 +204,8 @@ const Search = () => {
             return (
               <a
                 onClick={() => setInput(value.title)}
-                class="block px-4 py-2 text-sm text-gray-300 text-gray-700 hover:bg-gray-400 hover:text-white"
+                className="block px-4 py-2 text-sm hover:bg-gray-400 hover:text-white"
+                style={{ color: "#364A59" }}
               >
                 {value.title}
               </a>
