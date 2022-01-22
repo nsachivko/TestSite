@@ -27,7 +27,7 @@
 		"dotenv": "^8.2.0",
 		"elasticsearch": "^16.7.2",
 		"html-react-parser": "^1.4.5",
-		"isomorphic-unfetch": "^3.0.0",
+		"isomorphic-unfetch": "^3.1.0",
 		"jspdf": "^2.5.0",
 		"jspdf-react": "^1.0.11",
 		"next": "^12.0.8",
