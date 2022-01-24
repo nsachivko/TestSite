@@ -93,3 +93,31 @@
 .pageNumbers li button:focus {
   outline: none;
 }
+
+.editable {
+  border-radius: 5px;
+  font-size: large;
+  position: relative;
+  border: 1px solid gray;
+  padding: 3px;
+}
+
+.editable > div {
+  position: relative;
+  z-index: 1;
+}
+
+.editable::after {
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  content: attr(data-placeholder);
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.searchbar-input {
+  width: 250px;
+  outline: none;
+}

@@ -5,6 +5,7 @@ const titleColor = "#364A59"
 const searchResultsColor = "#24272A"
 const headingsContentColor = "#24272A"
 
+// Function that extracts domain from site
 const extractDomain = (url) => {
   let result
   let match
@@ -18,6 +19,9 @@ const extractDomain = (url) => {
   return result
 }
 
+// Renders posts with sites data
+// - The code is a function that takes in data as an argument and returns the rendered output.
+// - The code iterates through the data array and renders each item in the list.
 const renderData = (data) => {
   const noData = data.length === 0 ? true : false
   return (
@@ -34,7 +38,7 @@ const renderData = (data) => {
         }
         return (
           <li key={index}>
-            <div class="mt-5 p-2 rounded">
+            <div className="mt-5 p-2 rounded">
               <div>
                 <a
                   style={{
@@ -70,6 +74,7 @@ const renderData = (data) => {
   )
 }
 
+// Renders page controllers, buttons, page numbers
 const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
   const [data, setData] = useState([])
 
@@ -95,6 +100,12 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem)
 
+  // Renders page numbers
+  // - The code is rendering the page numbers.
+  // - The code starts by checking if the number is less than maxPageNumberLimit and greater than minPageNumberLimit,
+  // - in which case it renders a <li> with an id of that number and onClick handler.
+  // - If the current page is equal to that number, then it renders a <li> with className="active".
+  // - Otherwise, it returns null.
   const renderPageNumbers = pages.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
       return (
@@ -112,6 +123,8 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
     }
   })
 
+  // - Trigger, send user to first page after data reload
+  // - The code will cause the user to be sent back to the first page after data reload.
   useEffect(() => {
     if (pageNumber === 1) {
       pageNumber = 2
@@ -123,6 +136,7 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
     setData(searchResults)
   }, [searchResults])
 
+  // - Goes to next page
   const handleNextbtn = () => {
     if (currentPage < pages.length) {
       setcurrentPage(currentPage + 1)
@@ -134,6 +148,7 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
     }
   }
 
+  // Goes to previous page
   const handlePrevbtn = () => {
     if (currentPage > 1) {
       setcurrentPage(currentPage - 1)
@@ -144,6 +159,10 @@ const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
       }
     }
   }
+
+  // - Next, there are two links on the page.
+  // - One link is to go back one page (Prev) and another link is to go forward one page (Next).
+  // - The code renders button numbers, and search results.
   return (
     <>
       <h1

@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react"
+
+// To connect elastic search API
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
+// Search-Components, components for searchbar render function
 import DisplayResults from "./Search-Components/DisplayResults"
+import AutocompleteSuggestions from "./Search-Components/AutocompleteSuggestions"
 
-// Mui for input and autocomplete
-import TextField from "@mui/material/TextField"
-import Stack from "@mui/material/Stack"
-import Autocomplete from "@mui/material/Autocomplete"
-
-import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
-import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
-import Checkbox from "@mui/material/Checkbox"
-import IconButton from "@mui/material/IconButton"
-
+// Searchbar
 const Search = () => {
   // Hold search input value
   const [getInput, setInput] = useState()
@@ -28,7 +20,13 @@ const Search = () => {
   // Holds results of search for autocomplete system
   const [autoCompleteSuggestions, setAutoCompleteSuggestions] = useState([])
 
+  // Adds a class to display a list of suggestions
+  const [suggestionsDisplay, setSuggestionsDisplay] = useState("")
+
+  const [textCompleter, setTextCompleter] = useState()
+
   // Connection to web crawler
+  // Can be found at Enterprise Search/App Search/Credentials
   const client = ElasticAppSearch.createClient({
     searchKey: "search-6cujcf6k56b9itogx4nuw8pr",
     endpointBase: "https://my-test-app.ent.us-east4.gcp.elastic-cloud.com",
@@ -37,6 +35,7 @@ const Search = () => {
 
   // Set or expected values from search
   let options = {
+    // We can search by many attributes, (example: title, url, headings)
     search_fields: { title: {}, url: {} },
     result_fields: {
       id: { raw: {} },
@@ -45,6 +44,7 @@ const Search = () => {
       headings: { raw: {} },
       body_content: { raw: {} },
     },
+    // Sets number of pages that we want to render by default (we can change this value is future)
     page: {
       size: 10,
     },
@@ -83,23 +83,15 @@ const Search = () => {
     ) {
       const newResult = {
         title: param.getRaw("title").replace(/\|[^.]+$/, ""),
-        //title: param.data.headings.raw[1],
       }
       if (newResult.title.length > 50) {
         newResult.title = newResult.title.substr(0, 50)
         newResult.title += "..."
       }
-      // setAutoCompleteSuggestions((autoCompleteSuggestions) => [
-      //   ...autoCompleteSuggestions,
-      //   newResult,
-      // ])
       setAutoCompleteSuggestions((autoCompleteSuggestions) => [
         ...autoCompleteSuggestions,
         newResult,
       ])
-      // const temp = autoCompleteSuggestions.filter(
-      //   (v, i, a) => a.findIndex((t) => t.title === v.title) === i
-      // )
     }
   }
 
@@ -107,25 +99,36 @@ const Search = () => {
   // Adds data to search result array
   // Fix title for news
   const searchData = (param, addFunction) => {
-    setAutoCompleteSuggestions([])
-    client
-      .search(param, options)
-      .then((resultList) => {
-        resultList.results.forEach((result) => {
-          if (
-            result
-              .getRaw("title")
-              .replace(/\|[^.]+$/, "")
-              .trim() === "News Detail"
-          ) {
-            result.data.title.raw = result.data.headings.raw[1]
-          }
-          addFunction(result)
+    if (param.length !== 0) {
+      setAutoCompleteSuggestions([])
+      client
+        .search(param, options)
+        .then((resultList) => {
+          resultList.results.forEach((result) => {
+            if (
+              result
+                .getRaw("title")
+                .replace(/\|[^.]+$/, "")
+                .trim() === "News Detail"
+            ) {
+              result.data.title.raw = result.data.headings.raw[1]
+            }
+            if (
+              result.data.title.raw.replace(/\|[^.]+$/, "").trim() ===
+              "310.MAXX"
+            ) {
+              result.data.title.raw = result.data.headings.raw[3].replace(
+                "Welcome to",
+                ""
+              )
+            }
+            addFunction(result)
+          })
         })
-      })
-      .catch((error) => {
-        console.log(`error: ${error}`)
-      })
+        .catch((error) => {
+          console.log(`error: ${error}`)
+        })
+    }
   }
 
   // Sets searchbar input
@@ -150,6 +153,7 @@ const Search = () => {
     setAutoCompleteSuggestions([])
 
     // Passing autocomplete setter
+    setSuggestionsDisplay("")
     searchData(
       document.getElementById("free-solo-demo").value,
       addAutocompleteResult
@@ -158,12 +162,53 @@ const Search = () => {
 
   // Sets autocomplete suggestions
   // Works as trigger
+  // Data formating
   const autoCompleteOptions = () => {
     return autoCompleteSuggestions.filter(
       (v, i, a) => a.findIndex((t) => t.title === v.title) === i
     )
   }
 
+  const formatTextCompleter = () => {
+    if (
+      typeof autoCompleteSuggestions[0] !== "undefined" &&
+      getInput.length < 26
+    ) {
+      const tempInputArray = autoCompleteSuggestions[0].title
+        .toLowerCase()
+        .replaceAll("-", " ")
+        .replaceAll(".", " ")
+        .split(" ")
+      let result
+      const input = getInput.split(" ")
+      tempInputArray.forEach((word) => {
+        // word.includes(input[input.length - 1])
+        if (
+          word.substring(0, input[input.length - 1].length) ===
+          input[input.length - 1]
+        ) {
+          if (input.length > 1) {
+            result = ""
+            for (let i = 0; i < input.length - 1; i++) {
+              result += input[i] + " "
+            }
+            result += word
+          } else {
+            result = word
+          }
+        }
+      })
+      console.log(")> ", result)
+      return result
+    }
+  }
+
+  // - The value attribute is set to getInput, which will be the input box that the user types in.
+  // - onChange={() => setSearchInput(event.target.value)} sets up an event listener for
+  // - sets getInput value.
+  // - when input changes useEffect reacts and start search and gives auto suggestions
+  // - onClick={() => startSearch(event.target.value)} start main search all data
+  // - for getInput
   return (
     <div
       className="py-20 h-screen px-2"
@@ -176,16 +221,29 @@ const Search = () => {
             <div className="mb-3 xl:w-96">
               <div className="input-group relative flex flex-wrap items-stretch w-full mb-4">
                 <div className="flex justify-center">
-                  <input
+                  <div
+                    class="editable"
+                    data-placeholder={formatTextCompleter()}
+                  >
+                    <input
+                      class="searchbar-input"
+                      placeholder="Search"
+                      id="free-solo-demo"
+                      value={getInput}
+                      onChange={() => setSearchInput()}
+                      type="search"
+                    />
+                  </div>
+                  {/* <input
                     id="free-solo-demo"
                     value={getInput}
-                    onChange={() => setSearchInput(event.target.value)}
+                    onChange={() => setSearchInput()}
                     type="search"
                     className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     placeholder="Search"
                     aria-label="Search"
                     aria-describedby="button-addon3"
-                  ></input>
+                  ></input> */}
                   <button
                     onClick={() => startSearch(event.target.value)}
                     className="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
@@ -199,19 +257,11 @@ const Search = () => {
             </div>
           </div>
         </div>
-        <div className="absolute py-2 bg-white bg-gray-100 divide-y divide-gray-600 rounded-md shadow-xl w-44">
-          {autoCompleteOptions().map((value) => {
-            return (
-              <a
-                onClick={() => setInput(value.title)}
-                className="block px-4 py-2 text-sm hover:bg-gray-400 hover:text-white"
-                style={{ color: "#364A59" }}
-              >
-                {value.title}
-              </a>
-            )
-          })}
-        </div>
+        <AutocompleteSuggestions
+          suggestionsDisplay={suggestionsDisplay}
+          autoCompleteSuggestions={autoCompleteOptions()}
+          setInput={setInput}
+        ></AutocompleteSuggestions>
         <DisplayResults
           searchResults={searchResults}
           getInput={getInput}
