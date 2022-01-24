@@ -20,8 +20,8 @@ const AutocompleteSuggestions = ({
           display: { suggestionsDisplay },
           borderColor: "gray",
           borderWidth: "1px",
-          maxWidth: "483px",
-          minWidth: "483px",
+          maxWidth: "434px",
+          minWidth: "434px",
         }}
       >
         {autoCompleteSuggestions.map((value) => {
