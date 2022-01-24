@@ -8,8 +8,8 @@
 		"export": "cross-env next export",
 		"deploy": "cross-env next build && next export",
 		"start": "cross-env next start",
-		"cms-pull": "cross-env NODE_ENV=development node agility/agility.sync.js sync",
-		"cms-clear": "cross-env NODE_ENV=development node agility/agility.sync.js clear"
+		"cms-pull": "NODE_ENV=development node agility/agility.sync.js sync",
+		"cms-clear": "NODE_ENV=development node agility/agility.sync.js clear"
 	},
 	"dependencies": {
 		"@agility/content-fetch": "^1.1.2",
