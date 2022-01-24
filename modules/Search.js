@@ -133,12 +133,16 @@ const Search = () => {
 
   // Sets searchbar input
   const setSearchInput = () => {
+<<<<<<< HEAD
     setInput(
       document
         .getElementById("free-solo-demo")
         .value.replace(/^\s/, "")
         .replace("  ", " ")
     )
+=======
+    setInput(document.getElementById("free-solo-demo").value.replace(/^\s/, '').replace("  ", " "))
+>>>>>>> 7ae9c0d6b55aaa1f9746ee3bdc3a51eb7690b729
   }
 
   // Controller of search process
@@ -180,17 +184,25 @@ const Search = () => {
       getInput.length < 26
     ) {
       let test = autoCompleteSuggestions.map((result) => {
+<<<<<<< HEAD
         return result.title
           .toLowerCase()
+=======
+        return result.title.toLowerCase()
+>>>>>>> 7ae9c0d6b55aaa1f9746ee3bdc3a51eb7690b729
           .replaceAll("-", " ")
           .replaceAll(".", " ")
           .split(" ")
       })
       const iterations = test.length
       for (let i = iterations - 1; 1 < i; i--) {
+<<<<<<< HEAD
         test[i] = test[i].filter((e) => {
           return typeof e !== "undefined" && e !== "" ? e : null
         })
+=======
+        test[i] = test[i].filter((e) => { return typeof e !== 'undefined' && e !== "" ? e : null })
+>>>>>>> 7ae9c0d6b55aaa1f9746ee3bdc3a51eb7690b729
         test[0].push(...test[i])
       }
       const newTest = test[0]
