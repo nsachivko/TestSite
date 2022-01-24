@@ -6,6 +6,8 @@ import * as ElasticAppSearch from "@elastic/app-search-javascript"
 import DisplayResults from "./Search-Components/DisplayResults"
 import AutocompleteSuggestions from "./Search-Components/AutocompleteSuggestions"
 
+const textFillingSuggestions = require("./Search-Components/TextFillingSuggestions")
+
 // Searchbar
 const Search = () => {
   // Hold search input value
@@ -22,8 +24,6 @@ const Search = () => {
 
   // Adds a class to display a list of suggestions
   const [suggestionsDisplay, setSuggestionsDisplay] = useState("")
-
-  const [textCompleter, setTextCompleter] = useState()
 
   // Connection to web crawler
   // Can be found at Enterprise Search/App Search/Credentials
@@ -101,6 +101,7 @@ const Search = () => {
   const searchData = (param, addFunction) => {
     if (param.length !== 0) {
       setAutoCompleteSuggestions([])
+      // param is the word to search
       client
         .search(param, options)
         .then((resultList) => {
@@ -174,52 +175,6 @@ const Search = () => {
     )
   }
 
-  const formatTextCompleter = () => {
-    if (
-      typeof autoCompleteSuggestions[0] !== "undefined" &&
-      getInput.length < 26
-    ) {
-      let test = autoCompleteSuggestions.map((result) => {
-        return result.title
-          .toLowerCase()
-          .replaceAll("-", " ")
-          .replaceAll(".", " ")
-          .split(" ")
-      })
-      const iterations = test.length
-      for (let i = iterations - 1; 1 < i; i--) {
-        test[i] = test[i].filter((e) => {
-          return typeof e !== "undefined" && e !== "" ? e : null
-        })
-        test[0].push(...test[i])
-      }
-      const newTest = test[0]
-      let result
-      const input = getInput.split(" ")
-      newTest.forEach((word) => {
-        if (
-          word.substring(0, input[input.length - 1].length) ===
-          input[input.length - 1]
-        ) {
-          if (input.length > 1) {
-            result = ""
-            for (let i = 0; i < input.length - 1; i++) {
-              result += input[i] + " "
-            }
-            result += word
-          } else {
-            result = word
-          }
-        }
-      })
-      if (typeof result !== "undefined") {
-        if (result.length < 26) {
-          return result
-        }
-      }
-    }
-  }
-
   // - The value attribute is set to getInput, which will be the input box that the user types in.
   // - onChange={() => setSearchInput(event.target.value)} sets up an event listener for
   // - sets getInput value.
@@ -240,7 +195,10 @@ const Search = () => {
                 <div className="flex justify-center">
                   <div
                     class="editable"
-                    data-placeholder={formatTextCompleter()}
+                    data-placeholder={textFillingSuggestions.formatTextCompleter(
+                      autoCompleteSuggestions,
+                      getInput
+                    )}
                   >
                     <input
                       class="searchbar-input"
@@ -251,16 +209,6 @@ const Search = () => {
                       type="search"
                     />
                   </div>
-                  {/* <input
-                    id="free-solo-demo"
-                    value={getInput}
-                    onChange={() => setSearchInput()}
-                    type="search"
-                    className="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    placeholder="Search"
-                    aria-label="Search"
-                    aria-describedby="button-addon3"
-                  ></input> */}
                   <button
                     onClick={() => startSearch(event.target.value)}
                     className="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
