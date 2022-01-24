@@ -133,7 +133,12 @@ const Search = () => {
 
   // Sets searchbar input
   const setSearchInput = () => {
-    setInput(document.getElementById("free-solo-demo").value)
+    setInput(
+      document
+        .getElementById("free-solo-demo")
+        .value.replace(/^\s/, "")
+        .replace("  ", " ")
+    )
   }
 
   // Controller of search process
@@ -174,15 +179,24 @@ const Search = () => {
       typeof autoCompleteSuggestions[0] !== "undefined" &&
       getInput.length < 26
     ) {
-      const tempInputArray = autoCompleteSuggestions[0].title
-        .toLowerCase()
-        .replaceAll("-", " ")
-        .replaceAll(".", " ")
-        .split(" ")
+      let test = autoCompleteSuggestions.map((result) => {
+        return result.title
+          .toLowerCase()
+          .replaceAll("-", " ")
+          .replaceAll(".", " ")
+          .split(" ")
+      })
+      const iterations = test.length
+      for (let i = iterations - 1; 1 < i; i--) {
+        test[i] = test[i].filter((e) => {
+          return typeof e !== "undefined" && e !== "" ? e : null
+        })
+        test[0].push(...test[i])
+      }
+      const newTest = test[0]
       let result
       const input = getInput.split(" ")
-      tempInputArray.forEach((word) => {
-        // word.includes(input[input.length - 1])
+      newTest.forEach((word) => {
         if (
           word.substring(0, input[input.length - 1].length) ===
           input[input.length - 1]
@@ -198,8 +212,11 @@ const Search = () => {
           }
         }
       })
-      console.log(")> ", result)
-      return result
+      if (typeof result !== "undefined") {
+        if (result.length < 26) {
+          return result
+        }
+      }
     }
   }
 
