@@ -84,8 +84,8 @@ const Search = () => {
       const newResult = {
         title: param.getRaw("title").replace(/\|[^.]+$/, ""),
       }
-      if (newResult.title.length > 50) {
-        newResult.title = newResult.title.substr(0, 50)
+      if (newResult.title.length > 46) {
+        newResult.title = newResult.title.substr(0, 46)
         newResult.title += "..."
       }
       setAutoCompleteSuggestions((autoCompleteSuggestions) => [
@@ -190,12 +190,12 @@ const Search = () => {
       <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
         <div className="flex display-flex">
           <div className="flex justify-center">
-            <div className="mb-3 xl:w-96">
+            <div className="xl:w-96">
               <div className="input-group relative flex flex-wrap items-stretch w-full mb-4">
                 <div className="flex justify-center">
                   <div
                     class="editable"
-                    data-placeholder={textFillingSuggestions.formatTextCompleter(
+                    placeholder={textFillingSuggestions.formatTextCompleter(
                       autoCompleteSuggestions,
                       getInput
                     )}
@@ -211,7 +211,7 @@ const Search = () => {
                   </div>
                   <button
                     onClick={() => startSearch(event.target.value)}
-                    className="btn inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                    className="btn inline-block px-9 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
                     type="button"
                     id="button-addon3"
                   >
@@ -223,7 +223,6 @@ const Search = () => {
           </div>
         </div>
         <AutocompleteSuggestions
-          suggestionsDisplay={suggestionsDisplay}
           autoCompleteSuggestions={autoCompleteOptions()}
           setInput={setInput}
         ></AutocompleteSuggestions>
