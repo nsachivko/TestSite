@@ -75,7 +75,7 @@ const renderData = (data) => {
 }
 
 // Renders page controllers, buttons, page numbers
-const PaginationComponent = ({ searchResults, getInput, pageNumber }) => {
+const PaginationComponent = ({ searchResults, pageNumber }) => {
   const [data, setData] = useState([])
 
   const [currentPage, setcurrentPage] = useState(1)

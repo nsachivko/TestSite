@@ -7,7 +7,6 @@ import FormControl from "@mui/material/FormControl"
 const AutocompleteSuggestions = ({
   autoCompleteSuggestions,
   setInput,
-  suggestionsDisplay,
   getInput,
 }) => {
   let toDisplay
@@ -27,7 +26,6 @@ const AutocompleteSuggestions = ({
       <div
         className="p-3 absolute bg-white bg-gray-100 divide-y rounded"
         style={{
-          display: { suggestionsDisplay },
           borderColor: "gray",
           borderWidth: "1px",
           maxWidth: "434px",

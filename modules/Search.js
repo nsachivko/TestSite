@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, createContext } from "react"
 
 // To connect elastic search API
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
 // Search-Components, components for searchbar render function
 import DisplayResults from "./Search-Components/DisplayResults"
 import AutocompleteSuggestions from "./Search-Components/AutocompleteSuggestions"
+import { formControlClasses } from "@mui/material"
 
 const textFillingSuggestions = require("./Search-Components/TextFillingSuggestions")
 
@@ -201,6 +202,7 @@ const Search = () => {
                     )}
                   >
                     <input
+                      onBlur={() => setSuggestionsDisplay("none")}
                       class="searchbar-input"
                       placeholder="Search"
                       id="free-solo-demo"
@@ -222,16 +224,14 @@ const Search = () => {
             </div>
           </div>
         </div>
-        <AutocompleteSuggestions
-          autoCompleteSuggestions={autoCompleteOptions()}
-          setInput={setInput}
-          getInput={getInput}
-        ></AutocompleteSuggestions>
-        <DisplayResults
-          searchResults={searchResults}
-          getInput={getInput}
-          pageNumber={pageNumber}
-        />
+        <div style={{ display: suggestionsDisplay }}>
+          <AutocompleteSuggestions
+            autoCompleteSuggestions={autoCompleteOptions()}
+            setInput={setInput}
+            getInput={getInput}
+          ></AutocompleteSuggestions>
+        </div>
+        <DisplayResults searchResults={searchResults} pageNumber={pageNumber} />
       </div>
     </div>
   )
