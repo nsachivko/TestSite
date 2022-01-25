@@ -1,7 +1,8 @@
 const formatTextCompleter = (autoCompleteSuggestions, getInput) => {
   if (
     typeof autoCompleteSuggestions[0] !== "undefined" &&
-    getInput.length < 26
+    getInput.length < 26 &&
+    getInput.length > 0
   ) {
     let test = autoCompleteSuggestions.map((result) => {
       return result.title

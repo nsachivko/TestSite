@@ -8,8 +8,18 @@ const AutocompleteSuggestions = ({
   autoCompleteSuggestions,
   setInput,
   suggestionsDisplay,
+  getInput,
 }) => {
-  const toDisplay = autoCompleteSuggestions.length > 0 ? true : false
+  let toDisplay
+  if (
+    typeof getInput !== "undefined" &&
+    getInput.length > 0 &&
+    autoCompleteSuggestions.length > 0
+  ) {
+    toDisplay = true
+  } else {
+    toDisplay = false
+  }
 
   // Displays suggestions
   return (

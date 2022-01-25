@@ -225,6 +225,7 @@ const Search = () => {
         <AutocompleteSuggestions
           autoCompleteSuggestions={autoCompleteOptions()}
           setInput={setInput}
+          getInput={getInput}
         ></AutocompleteSuggestions>
         <DisplayResults
           searchResults={searchResults}
