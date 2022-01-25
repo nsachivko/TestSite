@@ -202,7 +202,6 @@ const Search = () => {
                     )}
                   >
                     <input
-                      onBlur={() => setSuggestionsDisplay("none")}
                       class="searchbar-input"
                       placeholder="Search"
                       id="free-solo-demo"
