@@ -93,3 +93,39 @@
 .pageNumbers li button:focus {
   outline: none;
 }
+
+.editable {
+  font-size: large;
+  position: relative;
+  border: 1px solid gray;
+  padding: 3px;
+}
+
+.editable > div {
+  position: relative;
+  z-index: 1;
+}
+
+.editable::after {
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  content: attr(placeholder);
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.searchbar-input {
+  width: 300px;
+  outline: none;
+}
+
+.suggestion-post {
+  margin-bottom: 15px;
+  color: #364a59;
+}
+
+.suggestion-post:hover {
+  background-color: #ffcf84;
+}
