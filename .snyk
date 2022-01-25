@@ -1,0 +1,59 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-AXIOS-1038255:
+    - '@agility/content-management > axios':
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-AXIOS-1579269:
+    - '@agility/content-management > axios':
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-CSSWHAT-1298035:
+    - truncate-html > cheerio > css-select > css-what:
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-FOLLOWREDIRECTS-2332181:
+    - '@agility/content-management > axios > follow-redirects':
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-JSPDF-1073626:
+    - jspdf-react > jspdf:
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-JSPDF-568273:
+    - jspdf-react > jspdf:
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-JSPDF-575256:
+    - jspdf-react > jspdf:
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+  SNYK-JS-NODEFETCH-2342118:
+    - next > node-fetch:
+        reason: None given
+        expires: '2022-02-24T20:42:06.032Z'
+      isomorphic-unfetch > node-fetch:
+        reason: None given
+        expires: '2022-02-24T20:43:36.001Z'
+    - '@appbaseio/reactivesearch > appbase-js > cross-fetch > node-fetch':
+        reason: None given
+        expires: '2022-02-24T20:42:06.033Z'
+  SNYK-JS-NTHCHECK-1586032:
+    - truncate-html > cheerio > css-select > nth-check:
+        reason: None given
+        expires: '2022-02-24T20:42:06.033Z'
+  SNYK-JS-POLISHED-1298071:
+    - '@appbaseio/reactivesearch > polished':
+        reason: None given
+        expires: '2022-02-24T20:42:06.033Z'
+  SNYK-JS-XMLDOM-1084960:
+    - jspdf-react > jspdf > canvg > xmldom:
+        reason: None given
+        expires: '2022-02-24T20:42:06.033Z'
+  SNYK-JS-XMLDOM-1534562:
+    - jspdf-react > jspdf > canvg > xmldom:
+        reason: None given
+        expires: '2022-02-24T20:42:06.033Z'
+patch: {}
