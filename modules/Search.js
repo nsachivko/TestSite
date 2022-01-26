@@ -205,7 +205,7 @@ const Search = () => {
                       onBlur={() =>
                         setTimeout(() => {
                           setSuggestionsDisplay("none")
-                        }, 100)
+                        }, 150)
                       }
                       class="searchbar-input"
                       placeholder="Search"

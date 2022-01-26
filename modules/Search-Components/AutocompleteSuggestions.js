@@ -40,13 +40,16 @@ const AutocompleteSuggestions = ({
       >
         {autoCompleteSuggestions.map((value) => {
           return (
-            <div class="suggestion-post">
-              <a
+            <div
+              class="suggestion-post"
+              onClick={() => onClickHandler(value.title)}
+            >
+              <button
                 onClick={() => onClickHandler(value.title)}
                 style={{ color: "#364a59" }}
               >
                 {value.title}
-              </a>
+              </button>
             </div>
           )
         })}
