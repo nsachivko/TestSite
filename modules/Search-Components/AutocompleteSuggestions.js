@@ -7,6 +7,7 @@ import FormControl from "@mui/material/FormControl"
 const AutocompleteSuggestions = ({
   autoCompleteSuggestions,
   setInput,
+  setSuggestionsDisplay,
   getInput,
 }) => {
   let toDisplay
@@ -18,6 +19,11 @@ const AutocompleteSuggestions = ({
     toDisplay = true
   } else {
     toDisplay = false
+  }
+
+  const onClickHandler = (input) => {
+    setSuggestionsDisplay("")
+    setInput(input)
   }
 
   // Displays suggestions
@@ -36,7 +42,7 @@ const AutocompleteSuggestions = ({
           return (
             <div class="suggestion-post">
               <a
-                onClick={() => setInput(value.title)}
+                onClick={() => onClickHandler(value.title)}
                 style={{ color: "#364a59" }}
               >
                 {value.title}

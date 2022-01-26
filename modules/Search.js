@@ -202,6 +202,11 @@ const Search = () => {
                     )}
                   >
                     <input
+                      onBlur={() =>
+                        setTimeout(() => {
+                          setSuggestionsDisplay("none")
+                        }, 100)
+                      }
                       class="searchbar-input"
                       placeholder="Search"
                       id="free-solo-demo"
@@ -227,6 +232,7 @@ const Search = () => {
           <AutocompleteSuggestions
             autoCompleteSuggestions={autoCompleteOptions()}
             setInput={setInput}
+            setSuggestionsDisplay={setSuggestionsDisplay}
             getInput={getInput}
           ></AutocompleteSuggestions>
         </div>
