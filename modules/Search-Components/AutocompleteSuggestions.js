@@ -3,6 +3,7 @@ import Box from "@mui/material/Box"
 import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
+const filter = require("./RelevanceSort")
 
 const AutocompleteSuggestions = ({
   autoCompleteSuggestions,
@@ -38,7 +39,7 @@ const AutocompleteSuggestions = ({
           minWidth: "434px",
         }}
       >
-        {autoCompleteSuggestions.map((value) => {
+        {filter.sortByTitle(autoCompleteSuggestions, getInput).map((value) => {
           return (
             <div
               class="suggestion-post"

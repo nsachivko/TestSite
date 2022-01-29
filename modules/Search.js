@@ -1,13 +1,14 @@
-import React, { useState, useEffect, createContext } from "react"
+import React, { useState, useEffect } from "react"
 
 // To connect elastic search API
 import * as ElasticAppSearch from "@elastic/app-search-javascript"
 // Search-Components, components for searchbar render function
 import DisplayResults from "./Search-Components/DisplayResults"
 import AutocompleteSuggestions from "./Search-Components/AutocompleteSuggestions"
-import { formControlClasses } from "@mui/material"
 
 const textFillingSuggestions = require("./Search-Components/TextFillingSuggestions")
+
+const filter = require("./Search-Components/RelevanceSort")
 
 // Searchbar
 const Search = () => {
@@ -49,6 +50,7 @@ const Search = () => {
     page: {
       size: 10,
     },
+    // query: "oxford",
   }
 
   // Adds resuls to array (searchResults)
@@ -236,7 +238,10 @@ const Search = () => {
             getInput={getInput}
           ></AutocompleteSuggestions>
         </div>
-        <DisplayResults searchResults={searchResults} pageNumber={pageNumber} />
+        <DisplayResults
+          searchResults={filter.sortByTitle(searchResults, getInput)}
+          pageNumber={pageNumber}
+        />
       </div>
     </div>
   )
