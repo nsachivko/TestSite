@@ -34,12 +34,12 @@ ignore:
     - next > node-fetch:
         reason: None given
         expires: '2022-02-24T20:42:06.032Z'
-      isomorphic-unfetch > node-fetch:
-        reason: None given
-        expires: '2022-02-24T20:43:36.001Z'
     - '@appbaseio/reactivesearch > appbase-js > cross-fetch > node-fetch':
         reason: None given
         expires: '2022-02-24T20:42:06.033Z'
+    - isomorphic-unfetch > node-fetch:
+        reason: None given
+        expires: '2022-02-24T20:43:36.001Z'
   SNYK-JS-NTHCHECK-1586032:
     - truncate-html > cheerio > css-select > nth-check:
         reason: None given
