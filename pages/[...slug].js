@@ -16,7 +16,6 @@ class AgilityPage extends Component {
         </div>
       )
     }
-
     return <Layout {...this.props} />
   }
 }

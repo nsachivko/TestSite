@@ -11,7 +11,7 @@ const textFillingSuggestions = require("./Search-Components/TextFillingSuggestio
 const filter = require("./Search-Components/RelevanceSort")
 
 // Searchbar
-const Search = () => {
+const Search = ({ ...props }) => {
   // Hold search input value
   const [getInput, setInput] = useState()
 
