@@ -31,6 +31,7 @@
     "isomorphic-unfetch": "^3.0.0",
     "jspdf": "^2.5.0",
     "jspdf-react": "^1.0.11",
+    "netlify-cli": "^9.8.4",
     "next": "^12.0.9",
     "postcss-import": "^14.0.2",
     "react": "^17.0.2",
@@ -42,6 +43,7 @@
     "truncate-html": "^0.0.1"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^4.2.7",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.1",
