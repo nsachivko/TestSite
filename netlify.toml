@@ -1,14 +1,11 @@
-# Config for the Netlify Build Plugin: netlify-plugin-fetch-feeds
 [[plugins]]
-  package = "netlify-plugin-fetch-feeds"
+package = "netlify-plugin-rss"
 
   [plugins.inputs]
-    # Where should data files reside
-    dataDir = "data"
-
-    # All the feeds we wish to gather for use in the build
-
-    [[plugins.inputs.feeds]]
-      name = "search"
-      url = "https://silly-johnson-a7726f.netlify.app/feed.json"
-      ttl = 120
+  # required configs, customize as needed
+  dirToScan = "/modules" # a subfolder to scan. "/" to scan all
+  authorName = "Nikita"
+  site_url = "https://silly-johnson-a7726f.netlify.app/"
+  title = "search test RSS Feed"
+  rssDescription = "search test RSS Feed"
+  categories = ['Technology', 'JAMstack', 'Web Development']

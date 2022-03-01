@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 
 const FeaturedPost = ({ ...props }) => {
-  console.log(props)
   props.page.seo.metaKeywords =
     props.page.seo.metaKeywords + props.fields.featuredPost.seo.metaKeywords
   props.page.seo.metaDescription =
