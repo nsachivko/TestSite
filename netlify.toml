@@ -1,10 +1,9 @@
 [[plugins]]
   package = "netlify-plugin-rss"
-  publish = "/"
 
     [plugins.inputs]
     # required configs, customize as needed
-    dirToScan = "modules" # a subfolder to scan. "/" to scan all
+    dirToScan = "../modules" # a subfolder to scan. "/" to scan all
     authorName = "Nikita"
     site_url = "https://silly-johnson-a7726f.netlify.app/"
     title = "search test RSS Feed"
