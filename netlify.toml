@@ -1,6 +1,6 @@
 [[plugins]]
   package = "netlify-plugin-rss"
-  publish = ".out"
+  publish = "/"
 
     [plugins.inputs]
     # required configs, customize as needed
