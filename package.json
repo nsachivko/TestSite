@@ -15,7 +15,7 @@
     "@agility/content-fetch": "^1.1.2",
     "@agility/content-management": "^0.3.0",
     "@agility/content-sync": "^0.1.8",
-    "@appbaseio/reactivesearch": "^3.28.0",
+    "@appbaseio/reactivesearch": "^3.29.0",
     "@elastic/app-search-javascript": "^7.16.0",
     "@elastic/app-search-node": "^7.16.0",
     "@elastic/search-ui-app-search-connector": "^1.8.0",
